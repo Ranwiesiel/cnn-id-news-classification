@@ -8,7 +8,6 @@ import re
 import string
 
 # Library untuk text preprocessing
-import sklearn
 import nltk
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.tokenize import word_tokenize
