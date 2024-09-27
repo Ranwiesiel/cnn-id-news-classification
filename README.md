@@ -1,7 +1,7 @@
 # 🎈 Klasifikasi Kategori Berita (Logistic Regression)
 
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://cnn-id-news-classification.streamlit.app/)
 
 ### How to run it on your local machine
 
