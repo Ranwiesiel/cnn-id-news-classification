@@ -12,6 +12,8 @@ import nltk
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+nltk.download('stopwords')
+nltk.download('punkt_tab')
 
 
 
