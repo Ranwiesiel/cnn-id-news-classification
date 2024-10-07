@@ -24,7 +24,6 @@ def clean_text(text: str=None) -> str:
 	"""
 	Mmembersihkan text dari karakter-karakter yang tidak diperlukan
 	"""
-	text = text.replace('\xa0', '',)
 	text = re.sub(r'((www\.[^\s]+)|(https?://[^\s]+))', ' ', text) # Menghapus https* and www*
 	text = re.sub(r'@[^\s]+', ' ', text) # Menghapus username
 	text = re.sub(r'[\s]+', ' ', text) # Menghapus tambahan spasi
@@ -57,19 +56,23 @@ def scrape_news(soup: str) -> dict:
 			full_text = div_content.get_text(strip=True)
 			text = full_text.split('--', 1)[-1]
 			text = text.split('var article')[0].strip()
-			
+
 			cleaned_text = clean_text(text)
 			texts.append(cleaned_text)
 
-	text_list = soup.find("div", class_="detail-text text-cnn_black text-sm grow min-w-0")
-	for text in text_list.find_all("p"):
-		if 'para_caption' not in text.get('class', []):
-			cleaned_text = clean_text(text.text)
-			texts.append(cleaned_text)
-		
+		berita["tanggal"] = soup.find("div", class_="container !w-[1100px] overscroll-none").find_all("div")[1].find_all("div")[2].text
+
+	else:
+		text_list = soup.find("div", class_="detail-text text-cnn_black text-sm grow min-w-0")
+		for text in text_list.find_all("p"):
+			if 'para_caption' not in text.get('class', []):
+				cleaned_text = clean_text(text.text)
+				texts.append(cleaned_text)
+
+		berita["tanggal"] = soup.find("div", class_="container !w-[1100px] overscroll-none").find_all("div")[1].find_all("div")[3].text
+
 	berita["isi"] = "\n".join(texts)
-	berita["tanggal"] = soup.find("div", class_="container !w-[1100px] overscroll-none").find_all("div")[1].find_all("div")[3].text
-	berita["kategori"] = soup.find("a", attrs={"aria-label": "link description", "dtr-act": "kanal"}).text
+	berita["kategori"] = soup.find("meta", attrs={'name': 'dtk:namakanal'})['content']
 	return berita
 
 # Mengambil html dari url
@@ -85,7 +88,7 @@ def get_html(url: str) -> str:
 		print(e)
 		return ""
 
-
+@st.cache_data
 def get_news(news_url: str) -> pd.DataFrame:
 	"""
 	Mengambil informasi dari isi berita yang ada pada url
